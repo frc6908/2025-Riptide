@@ -18,6 +18,9 @@ public final class Constants {
   }
 
   public static class AlgaeConstants {
+    public static final int ioSparkPort = 40;
+    public static final int algaeArmSparkPort = 41;
+
     public static final double intakeSpeed = 0.5;
     public static final double outtakeSpeed = 0.5;
     public static final double algaeArmSpeed = 0.2;
