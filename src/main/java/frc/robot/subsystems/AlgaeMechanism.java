@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeConstants;
@@ -18,6 +20,7 @@ public class AlgaeMechanism extends SubsystemBase {
     private final SparkMax ioSpark;
     private final SparkMax algaeArmSpark;
     // private final RelativeEncoder algaeArmEncoder;
+    private final DutyCycleEncoder algaeArmEncoder;
 
     public AlgaeMechanism(
         int ioSparkPort,
@@ -26,18 +29,23 @@ public class AlgaeMechanism extends SubsystemBase {
         ioSpark = new SparkMax(ioSparkPort, MotorType.kBrushless);
         algaeArmSpark = new SparkMax(algaeArmSparkPort, MotorType.kBrushless);
         // algaeArmEncoder = algaeArmSpark.getAlternateEncoder();
+        algaeArmEncoder = new DutyCycleEncoder(AlgaeConstants.algaeArmEncoderPort);
 
-        configureMotor(ioSpark, IdleMode.kBrake);
-        configureMotor(algaeArmSpark, IdleMode.kBrake);
+        configureMotor(ioSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
+        configureMotor(algaeArmSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
     }
 
     public void configureMotor(
         SparkMax spark,
-        IdleMode idleMode
+        IdleMode idleMode,
+        int currentLimit
         ) {
         SparkMaxConfig config = new SparkMaxConfig();
-        config.idleMode(idleMode);
+        config
+            .idleMode(idleMode)
+            .smartCurrentLimit(currentLimit);
         spark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
     }
 
     public void setIOSpark(double speed) {
@@ -54,5 +62,12 @@ public class AlgaeMechanism extends SubsystemBase {
 
     public void stopAlgaeArmSpark() {
         algaeArmSpark.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+
+        
     }
 }
