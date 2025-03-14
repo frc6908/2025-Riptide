@@ -1,26 +1,20 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.Constants.AlgaeConstants;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AlgaeConstants;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
 
 public class AlgaeMechanism extends SubsystemBase {
     private final SparkMax ioSpark;
     private final SparkMax algaeArmSpark;
-    // private final RelativeEncoder algaeArmEncoder;
-    private final DutyCycleEncoder algaeArmEncoder;
+    private final Encoder algaeArmEncoder;
 
     public AlgaeMechanism(
         int ioSparkPort,
@@ -28,9 +22,8 @@ public class AlgaeMechanism extends SubsystemBase {
     ) {
         ioSpark = new SparkMax(ioSparkPort, MotorType.kBrushless);
         algaeArmSpark = new SparkMax(algaeArmSparkPort, MotorType.kBrushless);
-        // algaeArmEncoder = algaeArmSpark.getAlternateEncoder();
-        algaeArmEncoder = new DutyCycleEncoder(AlgaeConstants.algaeArmEncoderPort);
-
+        algaeArmEncoder = new Encoder(AlgaeConstants.algaeArmEncoderChannelA, AlgaeConstants.algaeArmEncoderChannelB);
+        
         configureMotor(ioSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
         configureMotor(algaeArmSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
     }
@@ -62,6 +55,14 @@ public class AlgaeMechanism extends SubsystemBase {
 
     public void stopAlgaeArmSpark() {
         algaeArmSpark.stopMotor();
+    }
+
+    public double getArmEncoderValue() {
+        return algaeArmEncoder.get();
+    }
+
+    public void resetArmEncoder() {
+        algaeArmEncoder.reset();
     }
 
     @Override

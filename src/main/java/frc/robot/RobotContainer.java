@@ -11,6 +11,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.OuttakeAlgae;
+import frc.robot.commands.ResetArmEncoder;
 import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_operatorController =
+      new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,15 +56,16 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_driverController.a().whileTrue(new IntakeAlgae(m_algaeMech));
-    m_driverController.b().whileTrue(new OuttakeAlgae(m_algaeMech));
+    
+    // io algae
+    m_operatorController.a().whileTrue(new IntakeAlgae(m_algaeMech));
+    m_operatorController.b().whileTrue(new OuttakeAlgae(m_algaeMech));
 
-    m_driverController.x().whileTrue(new MoveArm(m_algaeMech, false));
-    m_driverController.y().whileTrue(new MoveArm(m_algaeMech, true));
+    // arm movemenet
+    m_operatorController.x().whileTrue(new MoveArm(m_algaeMech, false));
+    m_operatorController.y().whileTrue(new MoveArm(m_algaeMech, true));
+    m_operatorController.rightBumper().whileTrue(new ResetArmEncoder(m_algaeMech));
   }
 
   /**

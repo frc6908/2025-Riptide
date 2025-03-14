@@ -21,12 +21,17 @@ public final class Constants {
   public static class AlgaeConstants {
     public static final int ioSparkPort = 40;
     public static final int algaeArmSparkPort = 41;
-    public static final int algaeArmEncoderPort = 0;
+    public static final int algaeArmEncoderChannelA = 0;
+    public static final int algaeArmEncoderChannelB = 1;
 
     public static final double intakeSpeed = 0.5;
     public static final double outtakeSpeed = -0.5;
     public static final double algaeArmSpeed = 0.2;
 
     public static final int currentLimit = 35;
+
+    public static final double upperLimitRotation = 0.5;
+    public static final double lowerLimitRotation = 0;
+    public static final double softStopDistance = 0.2;
   }
 }
