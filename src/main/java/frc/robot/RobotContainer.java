@@ -12,8 +12,10 @@ import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.OuttakeAlgae;
 import frc.robot.commands.ResetArmEncoder;
+import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -28,6 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+  SwerveSubsystem m_drivetrain = new SwerveSubsystem();
   AlgaeMechanism m_algaeMech = new AlgaeMechanism(AlgaeConstants.ioSparkPort, AlgaeConstants.algaeArmSparkPort);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -38,6 +41,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_drivetrain.setDefaultCommand(new SwerveJoystickCmd(
+      m_drivetrain, 
+      () -> m_driverController.getLeftX(), 
+      () -> m_driverController.getLeftY(), 
+      () -> m_driverController.getRightX()
+    ));
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -75,6 +85,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return Autos.exampleAuto(m_drivetrain);
   }
 }
