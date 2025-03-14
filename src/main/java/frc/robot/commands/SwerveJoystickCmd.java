@@ -15,19 +15,21 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class SwerveJoystickCmd extends Command {
     public final SwerveSubsystem drivetrain;
-    private final DoubleSupplier forwardX, forwardY, rotation;
+    private final DoubleSupplier forwardX, forwardY, rotation, slider;
     private final SlewRateLimiter xLimiter, yLimiter, rLimiter;
 
     public SwerveJoystickCmd(
         SwerveSubsystem swerveSubsystem,
         DoubleSupplier forwardX,
         DoubleSupplier forwardY,
-        DoubleSupplier rotation
+        DoubleSupplier rotation,
+        DoubleSupplier slider
         ) {
         this.drivetrain = swerveSubsystem;
         this.forwardX = forwardX;
         this.forwardY = forwardY;
         this.rotation = rotation;
+        this.slider = slider;
 
         xLimiter = new SlewRateLimiter(DrivetrainConstants.maxAcceleration);
         yLimiter = new SlewRateLimiter(DrivetrainConstants.maxAcceleration);
@@ -44,10 +46,15 @@ public class SwerveJoystickCmd extends Command {
         double xSpeed = -forwardX.getAsDouble();
         double ySpeed = -forwardY.getAsDouble();
         double rot = -rotation.getAsDouble();
+        double sliderVal = slider.getAsDouble();
         
         xSpeed = applyDeadbandAndLimiter(xSpeed, OperatorConstants.xDeadband, xLimiter, DrivetrainConstants.maxVelocity);
         ySpeed = applyDeadbandAndLimiter(ySpeed, OperatorConstants.yDeadband, yLimiter, DrivetrainConstants.maxVelocity);
         rot = applyDeadbandAndLimiter(rot, OperatorConstants.rDeadband, rLimiter, DrivetrainConstants.maxAngularVelocity);
+
+        sliderVal = Math.max(sliderVal, 0.9);
+        xSpeed *= (1 - sliderVal);
+        ySpeed *= (1 - sliderVal);
 
         // can adjust speeds based on slider here
         //

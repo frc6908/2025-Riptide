@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
+import frc.robot.commands.MobilityAuton;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.MoveArm;
@@ -30,10 +30,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  SwerveSubsystem m_drivetrain = new SwerveSubsystem();
-  AlgaeMechanism m_algaeMech = new AlgaeMechanism(AlgaeConstants.ioSparkPort, AlgaeConstants.algaeArmSparkPort);
+  private final SwerveSubsystem m_drivetrain = new SwerveSubsystem();
+  private final AlgaeMechanism m_algaeMech = new AlgaeMechanism(AlgaeConstants.ioSparkPort, AlgaeConstants.algaeArmSparkPort);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_operatorController =
@@ -45,7 +44,8 @@ public class RobotContainer {
       m_drivetrain, 
       () -> m_driverController.getLeftX(), 
       () -> m_driverController.getLeftY(), 
-      () -> m_driverController.getRightX()
+      () -> m_driverController.getRightX(),
+      () -> m_driverController.getLeftTriggerAxis()
     ));
 
     // Configure the trigger bindings
@@ -65,8 +65,6 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-
     
     // io algae
     m_operatorController.a().whileTrue(new IntakeAlgae(m_algaeMech));
@@ -85,6 +83,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_drivetrain);
+    return MobilityAuton.exampleAuto(m_drivetrain);
   }
 }

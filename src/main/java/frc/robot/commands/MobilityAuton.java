@@ -9,15 +9,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-public final class Autos {
+public final class MobilityAuton {
   /** Example static factory for an autonomous command. */
   public static Command exampleAuto(SwerveSubsystem m_drivetrain) {
     return Commands.sequence(
-      new SwerveJoystickCmd(m_drivetrain,  () -> -.5, () -> 0, () -> 0).withTimeout(5)
+      new SwerveJoystickCmd(m_drivetrain,  () -> -.5, () -> 0, () -> 0, () -> 0).withTimeout(5)
     );
   }
 
-  private Autos() {
+  private MobilityAuton() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
 }
