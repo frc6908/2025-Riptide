@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.AlgaeConstants;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.SparkMax;
@@ -26,6 +27,8 @@ public class AlgaeMechanism extends SubsystemBase {
         
         configureMotor(ioSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
         configureMotor(algaeArmSpark, IdleMode.kBrake, AlgaeConstants.currentLimit);
+
+        
     }
 
     public void configureMotor(
@@ -58,7 +61,8 @@ public class AlgaeMechanism extends SubsystemBase {
     }
 
     public double getArmEncoderValue() {
-        return algaeArmEncoder.get();
+        // return algaeArmEncoder.getDistance();
+        return 3.2425;
     }
 
     public void resetArmEncoder() {
@@ -68,7 +72,6 @@ public class AlgaeMechanism extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-
-        
+        SmartDashboard.putNumber("Arm Encoder Val", getArmEncoderValue());
     }
 }

@@ -67,11 +67,11 @@ public class RobotContainer {
         .onTrue(new ExampleCommand(m_exampleSubsystem));
     
     // io algae
-    m_operatorController.a().whileTrue(new IntakeAlgae(m_algaeMech));
-    m_operatorController.b().whileTrue(new OuttakeAlgae(m_algaeMech));
+    m_operatorController.b().whileTrue(new IntakeAlgae(m_algaeMech));
+    m_operatorController.a().whileTrue(new OuttakeAlgae(m_algaeMech));
 
     // arm movemenet
-    m_operatorController.x().whileTrue(new MoveArm(m_algaeMech, false));
+    m_operatorController.a().whileTrue(new MoveArm(m_algaeMech, false));
     m_operatorController.y().whileTrue(new MoveArm(m_algaeMech, true));
     m_operatorController.rightBumper().whileTrue(new ResetArmEncoder(m_algaeMech));
   }

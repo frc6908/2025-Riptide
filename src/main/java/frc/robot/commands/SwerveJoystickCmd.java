@@ -52,7 +52,7 @@ public class SwerveJoystickCmd extends Command {
         ySpeed = applyDeadbandAndLimiter(ySpeed, OperatorConstants.yDeadband, yLimiter, DrivetrainConstants.maxVelocity);
         rot = applyDeadbandAndLimiter(rot, OperatorConstants.rDeadband, rLimiter, DrivetrainConstants.maxAngularVelocity);
 
-        sliderVal = Math.max(sliderVal, 0.9);
+        sliderVal = Math.min(sliderVal, 0.9);
         xSpeed *= (1 - sliderVal);
         ySpeed *= (1 - sliderVal);
 

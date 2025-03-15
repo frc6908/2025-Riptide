@@ -23,14 +23,14 @@ public class MoveArm extends Command {
         double distanceToEdge;
         double speed = AlgaeConstants.algaeArmSpeed;
         if (movingUp) {
-            distanceToEdge = AlgaeConstants.upperLimitRotation - m_algaeMech.getArmEncoderValue();
-            speed = Math.min(1, distanceToEdge/AlgaeConstants.softStopDistance) * AlgaeConstants.algaeArmSpeed;
+            // distanceToEdge = AlgaeConstants.upperLimitRotation - m_algaeMech.getArmEncoderValue();
+            // speed = Math.min(1, distanceToEdge/AlgaeConstants.softStopDistance) * -AlgaeConstants.algaeArmSpeed;
         }
         else {
-            distanceToEdge = m_algaeMech.getArmEncoderValue() - AlgaeConstants.lowerLimitRotation;
-            speed = Math.min(1, distanceToEdge/AlgaeConstants.softStopDistance) * AlgaeConstants.algaeArmSpeed;
+            // distanceToEdge = m_algaeMech.getArmEncoderValue() - AlgaeConstants.lowerLimitRotation;
+            // speed = Math.min(1, distanceToEdge/AlgaeConstants.softStopDistance) * AlgaeConstants.algaeArmSpeed;
         }
-        m_algaeMech.setAlgaeArmSpark(movingUp ? speed : -speed);
+        m_algaeMech.setAlgaeArmSpark(speed);
     }
 
     // Called once the command ends or is interrupted.

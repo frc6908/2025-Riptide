@@ -13,7 +13,7 @@ public final class MobilityAuton {
   /** Example static factory for an autonomous command. */
   public static Command exampleAuto(SwerveSubsystem m_drivetrain) {
     return Commands.sequence(
-      new SwerveJoystickCmd(m_drivetrain,  () -> -.5, () -> 0, () -> 0, () -> 0).withTimeout(5)
+      new SwerveJoystickCmd(m_drivetrain,  () -> - 1, () -> 0, () -> 0, () -> 0).withTimeout(5)
     );
   }
 
