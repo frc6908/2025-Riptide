@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AlgaeIntakePath (Left)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pauser"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AlgaeOuttakePath (Left)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pauser"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReturnPath (Left) "
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
