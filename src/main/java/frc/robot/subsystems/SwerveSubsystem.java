@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -203,5 +204,8 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("FR Angle Position", frontRight.getRotationPosition());
         SmartDashboard.putNumber("BL Angle Position", backLeft.getRotationPosition());
         SmartDashboard.putNumber("BR Angle Position", backRight.getRotationPosition());
+
+        CameraServer.startAutomaticCapture("camera", "http://10.69.8.11:1181/stream.mjpg");
+        
     }
 }

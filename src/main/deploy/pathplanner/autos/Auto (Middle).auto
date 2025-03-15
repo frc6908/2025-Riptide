@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Pauser"
+            "waitTime": 2.0
           }
         }
       ]
