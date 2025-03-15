@@ -203,5 +203,9 @@ public class SwerveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("FR Angle Position", frontRight.getRotationPosition());
         SmartDashboard.putNumber("BL Angle Position", backLeft.getRotationPosition());
         SmartDashboard.putNumber("BR Angle Position", backRight.getRotationPosition());
+
+        SmartDashboard.putNumber("Yaw", -navX.getYaw());
+
+        SmartDashboard.putBoolean("Field Realtive", fieldRelativeStatus);
     }
 }

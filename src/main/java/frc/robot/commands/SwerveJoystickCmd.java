@@ -43,21 +43,19 @@ public class SwerveJoystickCmd extends Command {
 
     @Override
     public void execute(){
-        double xSpeed = -forwardX.getAsDouble();
-        double ySpeed = -forwardY.getAsDouble();
-        double rot = -rotation.getAsDouble();
+        double xSpeed = forwardX.getAsDouble();
+        double ySpeed = forwardY.getAsDouble();
+        double rot = rotation.getAsDouble();
         double sliderVal = slider.getAsDouble();
         
         xSpeed = applyDeadbandAndLimiter(xSpeed, OperatorConstants.xDeadband, xLimiter, DrivetrainConstants.maxVelocity);
         ySpeed = applyDeadbandAndLimiter(ySpeed, OperatorConstants.yDeadband, yLimiter, DrivetrainConstants.maxVelocity);
         rot = applyDeadbandAndLimiter(rot, OperatorConstants.rDeadband, rLimiter, DrivetrainConstants.maxAngularVelocity);
 
-        sliderVal = Math.min(sliderVal, 0.9);
+        sliderVal = Math.min(sliderVal, 0.8);
         xSpeed *= (1 - sliderVal);
         ySpeed *= (1 - sliderVal);
-
-        // can adjust speeds based on slider here
-        //
+        rot *= (1 - sliderVal);
 
         // xSpeed = MathUtil.applyDeadband(xSpeed, 0.1, 1);
         // ySpeed = MathUtil.applyDeadband(ySpeed, 0.1, 1);

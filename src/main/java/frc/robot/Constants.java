@@ -39,8 +39,8 @@ public final class Constants {
     public static final int algaeArmEncoderChannelA = 0;
     public static final int algaeArmEncoderChannelB = 1;
 
-    public static final double intakeSpeed = 0.5;
-    public static final double outtakeSpeed = -0.5;
+    public static final double intakeSpeed = 0.75;
+    public static final double outtakeSpeed = -0.75;
     public static final double algaeArmSpeed = 0.1;
 
     public static final int currentLimit = 35;
@@ -88,8 +88,8 @@ public final class Constants {
     /* ======== */
 
     // maximillian
-    public static final double maxVelocity = 5; // m/s
-    public static final double maxAcceleration = 10; // m/s^2
+    public static final double maxVelocity = 2; // m/s
+    public static final double maxAcceleration = 7; // m/s^2
     public static final double maxAngularVelocity = 2 * Math.PI; // rad/s
     public static final double maxAngularAcceleration = 4 * Math.PI; // rad/s^2
     // Teleop Max Speeds

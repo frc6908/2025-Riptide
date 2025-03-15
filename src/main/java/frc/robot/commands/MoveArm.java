@@ -25,6 +25,7 @@ public class MoveArm extends Command {
         if (movingUp) {
             // distanceToEdge = AlgaeConstants.upperLimitRotation - m_algaeMech.getArmEncoderValue();
             // speed = Math.min(1, distanceToEdge/AlgaeConstants.softStopDistance) * -AlgaeConstants.algaeArmSpeed;
+            speed *= -1;
         }
         else {
             // distanceToEdge = m_algaeMech.getArmEncoderValue() - AlgaeConstants.lowerLimitRotation;

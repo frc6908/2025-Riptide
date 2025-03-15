@@ -8,10 +8,12 @@ import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.MobilityAuton;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.FlipFieldRelativity;
 import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.OuttakeAlgae;
 import frc.robot.commands.ResetArmEncoder;
+import frc.robot.commands.ResetNavX;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -42,8 +44,8 @@ public class RobotContainer {
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(new SwerveJoystickCmd(
       m_drivetrain, 
-      () -> m_driverController.getLeftX(), 
       () -> m_driverController.getLeftY(), 
+      () -> m_driverController.getLeftX(), 
       () -> m_driverController.getRightX(),
       () -> m_driverController.getLeftTriggerAxis()
     ));
@@ -66,9 +68,15 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
     
+    // flip field relativity
+    m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
+
+    // reset navX heading
+    m_driverController.y().whileTrue(new ResetNavX(m_drivetrain));
+
     // io algae
     m_operatorController.b().whileTrue(new IntakeAlgae(m_algaeMech));
-    m_operatorController.a().whileTrue(new OuttakeAlgae(m_algaeMech));
+    m_operatorController.x().whileTrue(new OuttakeAlgae(m_algaeMech));
 
     // arm movemenet
     m_operatorController.a().whileTrue(new MoveArm(m_algaeMech, false));
