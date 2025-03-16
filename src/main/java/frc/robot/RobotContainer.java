@@ -69,7 +69,8 @@ public class RobotContainer {
         .onTrue(new ExampleCommand(m_exampleSubsystem));
     
     // flip field relativity
-    m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
+    // m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
+    m_driverController.x().toggleOnTrue(new FlipFieldRelativity(m_drivetrain));
 
     // reset navX heading
     m_driverController.y().whileTrue(new ResetNavX(m_drivetrain));
