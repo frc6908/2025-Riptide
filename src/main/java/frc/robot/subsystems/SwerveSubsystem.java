@@ -152,8 +152,8 @@ public class SwerveSubsystem extends SubsystemBase{
         return states;
     }
 
-    public void setFieldRelativity(){
-        fieldRelativeStatus = !fieldRelativeStatus;
+    public void setFieldRelativity(boolean relativity){
+        fieldRelativeStatus = relativity;
     }
 
     public void drive(double forward, double strafe, double rotation, boolean isFieldRelative){

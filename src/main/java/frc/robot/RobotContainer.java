@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.MobilityAuton;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FlipFieldRelativity;
+import frc.robot.commands.FlipFieldRelativity2;
 import frc.robot.commands.IntakeAlgae;
 import frc.robot.commands.MoveArm;
 import frc.robot.commands.OuttakeAlgae;
@@ -70,7 +71,8 @@ public class RobotContainer {
     
     // flip field relativity
     // m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
-    m_driverController.x().toggleOnTrue(new FlipFieldRelativity(m_drivetrain));
+    m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
+    m_driverController.a().whileTrue(new FlipFieldRelativity2(m_drivetrain));
 
     // reset navX heading
     m_driverController.y().whileTrue(new ResetNavX(m_drivetrain));

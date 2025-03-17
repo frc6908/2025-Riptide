@@ -1,14 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AlgaeConstants;
-import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class FlipFieldRelativity extends Command {
+public class FlipFieldRelativity2 extends Command {
     private final SwerveSubsystem m_drivetrain;
 
-    public FlipFieldRelativity(SwerveSubsystem drivetrain) {
+    public FlipFieldRelativity2(SwerveSubsystem drivetrain) {
         m_drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
@@ -20,7 +18,7 @@ public class FlipFieldRelativity extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_drivetrain.setFieldRelativity(true);
+        m_drivetrain.setFieldRelativity(false);
     }
 
     // Called once the command ends or is interrupted.
