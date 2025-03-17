@@ -7,16 +7,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DrivetrainConstants;
-
-import javax.lang.model.type.DeclaredType;
 
 import org.littletonrobotics.junction.Logger;
 
 import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -68,7 +64,8 @@ public class SwerveSubsystem extends SubsystemBase{
     );
 
     public SwerveSubsystem(){
-        navX = new AHRS(AHRS.NavXComType.kMXP_SPI); // might not be correct declaration
+        navX = new AHRS(AHRS.NavXComType.kMXP_SPI);
+        
         // need to delay navX startup by 1 second because it might take longer to boot up
         new Thread(() -> {
             try{

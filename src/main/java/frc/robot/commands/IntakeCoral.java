@@ -1,14 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.CoralConstants;
+import frc.robot.subsystems.CoralMechanism;
 
-public class ResetNavX extends Command {
-    private final SwerveSubsystem m_drivetrain;
+public class IntakeCoral extends Command {
+    private final CoralMechanism m_coralMech;
     
-    public ResetNavX(SwerveSubsystem drivetrain) {
-        m_drivetrain = drivetrain;
-        addRequirements(drivetrain);
+    public IntakeCoral(CoralMechanism coralMech) {
+        m_coralMech = coralMech;
+        addRequirements(coralMech);
     }
 
     // Called when the command is initially scheduled.
@@ -18,13 +19,13 @@ public class ResetNavX extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_drivetrain.resetHeading();
+        m_coralMech.setIOSpark(CoralConstants.intakeSpeed);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        
+        m_coralMech.stopIOSpark();
     }
 
     // Returns true when the command should end.

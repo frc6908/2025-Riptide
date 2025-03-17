@@ -50,6 +50,14 @@ public final class Constants {
     public static final double softStopDistance = 0.2;
   }
 
+  public static class CoralConstants {
+    public static final int ioSparkPort = 50;
+
+    public static final double intakeSpeed = 0.5;
+
+    public static final int currentLimit = 35;
+  }
+
   public static class DrivetrainConstants {
     // Swerve Kinematics, X forward/backward and Y is left/right
     public static final double wheelBase = Units.inchesToMeters(21); // distance between inside front wheels

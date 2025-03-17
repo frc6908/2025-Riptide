@@ -4,21 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.MobilityAuton;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.FlipFieldRelativity;
-import frc.robot.commands.FlipFieldRelativity2;
-import frc.robot.commands.IntakeAlgae;
-import frc.robot.commands.MoveArm;
-import frc.robot.commands.OuttakeAlgae;
-import frc.robot.commands.ResetArmEncoder;
-import frc.robot.commands.ResetNavX;
-import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.AlgaeMechanism;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.*;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -35,6 +23,7 @@ public class RobotContainer {
 
   private final SwerveSubsystem m_drivetrain = new SwerveSubsystem();
   private final AlgaeMechanism m_algaeMech = new AlgaeMechanism(AlgaeConstants.ioSparkPort, AlgaeConstants.algaeArmSparkPort);
+  private final CoralMechanism m_coralMech = new CoralMechanism(CoralConstants.ioSparkPort);
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -77,6 +66,9 @@ public class RobotContainer {
     // reset navX heading
     m_driverController.y().whileTrue(new ResetNavX(m_drivetrain));
 
+    // io coral
+    m_operatorController.rightTrigger().whileTrue(new IntakeCoral(m_coralMech));
+
     // io algae
     m_operatorController.b().whileTrue(new IntakeAlgae(m_algaeMech));
     m_operatorController.x().whileTrue(new OuttakeAlgae(m_algaeMech));
@@ -85,6 +77,7 @@ public class RobotContainer {
     m_operatorController.a().whileTrue(new MoveArm(m_algaeMech, false));
     m_operatorController.y().whileTrue(new MoveArm(m_algaeMech, true));
     m_operatorController.rightBumper().whileTrue(new ResetArmEncoder(m_algaeMech));
+
   }
 
   /**
