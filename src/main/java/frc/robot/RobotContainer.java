@@ -19,6 +19,11 @@ import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -31,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final SendableChooser<Command> autoChooser;
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final SwerveSubsystem m_drivetrain = new SwerveSubsystem();
@@ -43,6 +49,15 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+     autoChooser = AutoBuilder.buildAutoChooser();
+     NamedCommands.registerCommand("AlgaeIntake", new IntakeAlgae(m_algaeMech));
+     NamedCommands.registerCommand("AlgaeOuttake", new OuttakeAlgae(m_algaeMech));
+
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     m_drivetrain.setDefaultCommand(new SwerveJoystickCmd(
       m_drivetrain, 
       () -> m_driverController.getLeftY(), 
@@ -94,6 +109,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return MobilityAuton.exampleAuto(m_drivetrain);
+    //return MobilityAuton.exampleAuto(m_drivetrain);
+    return autoChooser.getSelected();
   }
 }

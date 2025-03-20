@@ -35,6 +35,8 @@ import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 public class SwerveSubsystem extends SubsystemBase{
     public static boolean fieldRelativeStatus = true;
@@ -82,6 +84,15 @@ public class SwerveSubsystem extends SubsystemBase{
         getModulePositions()
     );
 
+    private final SwerveDriveKinematics kinematics = 
+    new SwerveDriveKinematics(
+        new Translation2d(27 / 2, 19.1 / 2), //check math
+        new Translation2d(27 / 2, -19.1 / 2),
+        new Translation2d(-27 / 2, 19.1 / 2),
+        new Translation2d(-27 / 2, -19.1 / 2)
+    );
+
+
     public SwerveSubsystem(){
         navX = new AHRS(AHRS.NavXComType.kMXP_SPI); // might not be correct declaration
         // need to delay navX startup by 1 second because it might take longer to boot up
@@ -106,7 +117,7 @@ public class SwerveSubsystem extends SubsystemBase{
         backLeft.resetEncoder();
         backRight.resetEncoder();
 
-        RobotConfig config;
+        RobotConfig config = null;
         try{
             config = RobotConfig.fromGUISettings();
          } catch (Exception e) {
@@ -117,8 +128,8 @@ public class SwerveSubsystem extends SubsystemBase{
         AutoBuilder.configure(
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            this::getRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
@@ -151,6 +162,17 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public Pose2d getPose(){
         return odometry.getPoseMeters();
+    }
+
+    
+    public ChassisSpeeds getRobotChassisSpeeds(){
+        return kinematics.toChassisSpeeds(getStates());
+    }
+
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+        setModuleStates(moduleStates);
     }
 
 
