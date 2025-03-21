@@ -22,8 +22,8 @@ public final class Constants {
     /* ================ */
     /* CONTROLLER PORTS */
     /* ================ */
-    public static final int kDriverControllerPort = 1;
-    public static final int kOperatorControllerPort = 0;
+    public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
 
     /* ========= */
     /* Deadbands */
