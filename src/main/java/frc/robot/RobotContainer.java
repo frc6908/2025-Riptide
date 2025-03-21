@@ -54,6 +54,8 @@ public class RobotContainer {
      autoChooser = AutoBuilder.buildAutoChooser();
      NamedCommands.registerCommand("AlgaeIntake", new IntakeAlgae(m_algaeMech));
      NamedCommands.registerCommand("AlgaeOuttake", new OuttakeAlgae(m_algaeMech));
+     NamedCommands.registerCommand("ArmDown", new MoveArm(m_algaeMech, false));
+     NamedCommands.registerCommand("ArmUp", new MoveArm(m_algaeMech,true));
 
 
     // Another option that allows you to specify the default auto by its name
