@@ -22,8 +22,8 @@ public final class Constants {
     /* ================ */
     /* CONTROLLER PORTS */
     /* ================ */
-    public static final int kDriverControllerPort = 0;
-    public static final int kOperatorControllerPort = 1;
+    public static final int kDriverControllerPort = 1;
+    public static final int kOperatorControllerPort = 0;
 
     /* ========= */
     /* Deadbands */
@@ -105,28 +105,28 @@ public final class Constants {
     public static final int kFLDrive = 4;
     public static final int kFLRotate = 7;
     public static final int kFLCanCoder = 14;
-    public static final double kFLOffsetRad = 0.088623 * 2 * Math.PI;
+    public static final double kFLOffsetRad = 0.062012 * 2 * Math.PI;
     public static final boolean fLIsInverted = true;
 
     // Front Right Module
     public static final int kFRDrive = 5;
     public static final int kFRRotate = 3;
     public static final int kFRCanCoder = 13;
-    public static final double kFROffsetRad = 0.00708 * 2 * Math.PI;
+    public static final double kFROffsetRad = 0.031006 * 2 * Math.PI;
     public static final boolean fRIsInverted = true;
     
     // Back Left Module
     public static final int kBLDrive = 6;
     public static final int kBLRotate = 1;
     public static final int kBLCanCoder = 12;
-    public static final double kBLOffsetRad = 0.025391 * 2 * Math.PI;
+    public static final double kBLOffsetRad = 0.023193 * 2 * Math.PI;
     public static final boolean bLIsInverted = true;
 
     // Back Right Module
     public static final int kBRDrive = 8;
     public static final int kBRRotate = 2;
     public static final int kBRCanCoder = 11;
-    public static final double kBROffsetRad = 0.3479 * 2 * Math.PI;
+    public static final double kBROffsetRad = 0.347656 * 2 * Math.PI;
     public static final boolean bRIsInverted = true;
     /* =============================== */
     /* SWERVE MODULE CONTROL CONSTANTS */

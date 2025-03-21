@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.robot.Constants.AlgaeConstants;
@@ -19,9 +15,21 @@ import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+
+import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,6 +49,10 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController =
       new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
+  // Auto selection chooser
+  SendableChooser<String> autoChooser = new SendableChooser<>();
+  SendableChooser<String> AllianceChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(new SwerveJoystickCmd(
@@ -53,6 +65,16 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+
+    // Add auto options to the chooser
+    autoChooser.setDefaultOption("Mobility Auto", "MobilityAuto");
+    autoChooser.addOption("Algae Auto", "AlgaeAuto");
+    autoChooser.addOption("Custom Path Auto", "CustomPathAuto");
+
+    // Put the auto chooser on the SmartDashboard
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putBoolean("Use PathPlanner", true);
+    SmartDashboard.putBoolean("Debug Swerve", false);
   }
 
   /**
@@ -70,7 +92,6 @@ public class RobotContainer {
         .onTrue(new ExampleCommand(m_exampleSubsystem));
     
     // flip field relativity
-    // m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
     m_driverController.x().whileTrue(new FlipFieldRelativity(m_drivetrain));
     m_driverController.a().whileTrue(new FlipFieldRelativity2(m_drivetrain));
 
@@ -81,7 +102,7 @@ public class RobotContainer {
     m_operatorController.b().whileTrue(new IntakeAlgae(m_algaeMech));
     m_operatorController.x().whileTrue(new OuttakeAlgae(m_algaeMech));
 
-    // arm movemenet
+    // arm movement
     m_operatorController.a().whileTrue(new MoveArm(m_algaeMech, false));
     m_operatorController.y().whileTrue(new MoveArm(m_algaeMech, true));
     m_operatorController.rightBumper().whileTrue(new ResetArmEncoder(m_algaeMech));
@@ -93,7 +114,46 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return MobilityAuton.exampleAuto(m_drivetrain);
-  }
+    String selectedAuto = autoChooser.getSelected();
+
+    try {
+        switch (selectedAuto) {
+            case "MobilityAuto":
+                return MobilityAuton.exampleAuto(m_drivetrain); // Keep Mobility Auto
+
+            case "AlgaeAuto":
+                return AutoBuilder.buildAuto("Algae Auto"); // Execute the full auto
+
+            case "New1AlgaeAuto":
+                return AutoBuilder.buildAuto("New 1 Algae"); // Execute the full auto
+
+            default:
+                DriverStation.reportError("No autonomous selected, defaulting to Mobility Auto", false);
+                return MobilityAuton.exampleAuto(m_drivetrain);
+        }
+    } catch (Exception e) {
+        DriverStation.reportError("Error loading auto: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+}
+
+
+
+//   /**
+//    * Loads and executes a PathPlanner path.
+//    *
+//    * @param pathName The name of the path to load (should match the name of the .auto file)
+//    * @return A command to follow the PathPlanner path
+//    */
+//   private Command loadPathPlannerAuto(String autoName) {
+//     try {
+//         // Directly build and return the auto command from the name
+//         return AutoBuilder.buildAuto(autoName);
+//     } catch (Exception e) {
+//         // If there is an error, print the error and return a no-op command
+//         DriverStation.reportError("Error loading auto: " + e.getMessage(), e.getStackTrace());
+//         return Commands.none();
+//     }
+// }
+
 }
