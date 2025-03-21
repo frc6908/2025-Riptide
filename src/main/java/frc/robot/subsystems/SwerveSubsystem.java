@@ -86,10 +86,10 @@ public class SwerveSubsystem extends SubsystemBase{
 
     private final SwerveDriveKinematics kinematics = 
     new SwerveDriveKinematics(
-        new Translation2d(27 / 2, 19.1 / 2), //check math
-        new Translation2d(27 / 2, -19.1 / 2),
-        new Translation2d(-27 / 2, 19.1 / 2),
-        new Translation2d(-27 / 2, -19.1 / 2)
+        new Translation2d(.7112 / 2, 1.0 / 2),
+        new Translation2d(.7112 / 2, -1.0 / 2),
+        new Translation2d(-.7112 / 2, 1.0 / 2),
+        new Translation2d(-.7112 / 2, -1.0 / 2)
     );
 
 
