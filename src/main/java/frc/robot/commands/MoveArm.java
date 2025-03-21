@@ -20,7 +20,7 @@ public class MoveArm extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double distanceToEdge;
+        //double distanceToEdge;
         double speed = AlgaeConstants.algaeArmSpeed;
         if (movingUp) {
             // distanceToEdge = AlgaeConstants.upperLimitRotation - m_algaeMech.getArmEncoderValue();
