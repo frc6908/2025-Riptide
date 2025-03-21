@@ -14,18 +14,6 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DrivetrainConstants;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.events.EventTrigger;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-
 import javax.lang.model.type.DeclaredType;
 
 import org.littletonrobotics.junction.Logger;
@@ -105,35 +93,7 @@ public class SwerveSubsystem extends SubsystemBase{
         frontRight.resetEncoder();
         backLeft.resetEncoder();
         backRight.resetEncoder();
-
-        try {
-            RobotConfig config = RobotConfig.fromGUISettings(); // Properly initialize config
-        
-                AutoBuilder.configure(
-                    this::getPose, // Robot pose supplier
-                    this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                    this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                    (speeds, feedforwards) -> drive(speeds), // Properly handle speeds; feedforwards unused
-                    new PPHolonomicDriveController( // PPHolonomicController is the built-in path-following controller for holonomic drive trains
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0)  // Rotation PID constants
-                    ),
-                    config, // The robot configuration
-                    
-                    () -> {
-                        var alliance = DriverStation.getAlliance();
-                        return alliance.isPresent() && alliance.get() == Alliance.Red;
-                    }, // Proper red alliance mirroring
-                    this // Reference to this subsystem to set requirements
-            );
-
-        
-        } 
-        catch (Exception e) {
-            DriverStation.reportError("Failed to load RobotConfig: " + e.getMessage(), e.getStackTrace());}
-        }
-        
-
+    }
     
 
     // method to stop modules
