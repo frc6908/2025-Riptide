@@ -2,7 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants.AlgaeConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.MobilityAuton;
+//import frc.robot.commands.MobilityAuton;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FlipFieldRelativity;
 import frc.robot.commands.FlipFieldRelativity2;
@@ -16,13 +16,9 @@ import frc.robot.subsystems.AlgaeMechanism;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final SendableChooser<Command> autoChooser;
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final SwerveSubsystem m_drivetrain = new SwerveSubsystem();
@@ -55,6 +52,18 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+     autoChooser = AutoBuilder.buildAutoChooser();
+     NamedCommands.registerCommand("AlgaeIntake", new IntakeAlgae(m_algaeMech));
+     NamedCommands.registerCommand("AlgaeOuttake", new OuttakeAlgae(m_algaeMech));
+     NamedCommands.registerCommand("ArmDown", new MoveArm(m_algaeMech, false));
+     NamedCommands.registerCommand("ArmUp", new MoveArm(m_algaeMech,true));
+     SmartDashboard.putData("AutoChooser", autoChooser);
+
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
     m_drivetrain.setDefaultCommand(new SwerveJoystickCmd(
       m_drivetrain, 
       () -> m_driverController.getLeftY(), 
@@ -114,46 +123,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    String selectedAuto = autoChooser.getSelected();
-
-    try {
-        switch (selectedAuto) {
-            case "MobilityAuto":
-                return MobilityAuton.exampleAuto(m_drivetrain); // Keep Mobility Auto
-
-            case "AlgaeAuto":
-                return AutoBuilder.buildAuto("Algae Auto"); // Execute the full auto
-
-            case "New1AlgaeAuto":
-                return AutoBuilder.buildAuto("New 1 Algae"); // Execute the full auto
-
-            default:
-                DriverStation.reportError("No autonomous selected, defaulting to Mobility Auto", false);
-                return MobilityAuton.exampleAuto(m_drivetrain);
-        }
-    } catch (Exception e) {
-        DriverStation.reportError("Error loading auto: " + e.getMessage(), e.getStackTrace());
-        return Commands.none();
-    }
-}
-
-
-
-//   /**
-//    * Loads and executes a PathPlanner path.
-//    *
-//    * @param pathName The name of the path to load (should match the name of the .auto file)
-//    * @return A command to follow the PathPlanner path
-//    */
-//   private Command loadPathPlannerAuto(String autoName) {
-//     try {
-//         // Directly build and return the auto command from the name
-//         return AutoBuilder.buildAuto(autoName);
-//     } catch (Exception e) {
-//         // If there is an error, print the error and return a no-op command
-//         DriverStation.reportError("Error loading auto: " + e.getMessage(), e.getStackTrace());
-//         return Commands.none();
-//     }
-// }
-
+    // An example command will be run in autonomous
+    //return MobilityAuton.exampleAuto(m_drivetrain);
+    return autoChooser.getSelected();
+  }
 }

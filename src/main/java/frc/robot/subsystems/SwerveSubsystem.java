@@ -1,25 +1,27 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DrivetrainConstants;
 
-import javax.lang.model.type.DeclaredType;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+
 
 import org.littletonrobotics.junction.Logger;
 
 import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
+
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -70,6 +72,15 @@ public class SwerveSubsystem extends SubsystemBase{
         getModulePositions()
     );
 
+    private final SwerveDriveKinematics kinematics = 
+    new SwerveDriveKinematics(
+        new Translation2d(.7112 / 2, 1.0 / 2),
+        new Translation2d(.7112 / 2, -1.0 / 2),
+        new Translation2d(-.7112 / 2, 1.0 / 2),
+        new Translation2d(-.7112 / 2, -1.0 / 2)
+    );
+
+
     public SwerveSubsystem(){
         navX = new AHRS(AHRS.NavXComType.kMXP_SPI); // might not be correct declaration
         // need to delay navX startup by 1 second because it might take longer to boot up
@@ -93,7 +104,40 @@ public class SwerveSubsystem extends SubsystemBase{
         frontRight.resetEncoder();
         backLeft.resetEncoder();
         backRight.resetEncoder();
+
+        RobotConfig config = null;
+        try{
+            config = RobotConfig.fromGUISettings();
+         } catch (Exception e) {
+        // Handle exception as needed
+            e.printStackTrace();
+        }
+
+        AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+        );
     }
+
     
 
     // method to stop modules
@@ -106,6 +150,17 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public Pose2d getPose(){
         return odometry.getPoseMeters();
+    }
+
+    
+    public ChassisSpeeds getRobotChassisSpeeds(){
+        return kinematics.toChassisSpeeds(getStates());
+    }
+
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+        setModuleStates(moduleStates);
     }
 
 
