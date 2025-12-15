@@ -173,12 +173,23 @@ public class SwerveSubsystem extends SubsystemBase{
         return navX;
     }
 
-    public void resetHeading(){
+    public void resetHeading(){ //general reset heading to 0
         navX.reset();
     }
 
-    public void resetOdometry(Pose2d pose){
-        odometry.resetPosition(getHeading(), getModulePositions(), pose);
+
+    public void resetHeading(double headingDeg){ // reset heading to a specific angle
+        navX.reset();
+        navX.setAngleAdjustment(-headingDeg);
+        navX.zeroYaw();
+    }
+
+    public void resetOdometry(Pose2d pose){ // reset odometry to a specific pose
+        Rotation2d pathRotation = pose.getRotation();
+
+        odometry.resetPosition(pathRotation, getModulePositions(), pose);
+
+        resetHeading(pathRotation.getDegrees());
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates){
